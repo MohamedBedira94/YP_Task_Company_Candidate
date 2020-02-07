@@ -1,0 +1,12 @@
+CREATE VIEW job_posts_info
+SELECT job_posts.*,count(job_post_application.job_id) as application_num,countries.name as country_name ,cities.name as city_name,
+GROUP_CONCAT(job_industry.industry_name) as job_indust,GROUP_CONCAT(job_rule.rule_name) as job_rule ,GROUP_CONCAT(job_type.type_name) as job_type 
+FROM `job_posts` 
+LEFT JOIN job_post_application ON job_posts.id = job_post_application.job_id 
+LEFT JOIN cities on cities.id = job_posts.city_id 
+LEFT JOIN countries ON countries.id = job_posts.coutry_id 
+LEFT JOIN job_industry ON job_industry.id IN ( job_posts.job_industries ) 
+LEFT JOIN job_rule ON job_rule.id IN (job_posts.job_rules)
+LEFT JOIN job_type ON job_type.id IN (job_posts.job_types)
+
+GROUP BY job_posts.id order by job_posts.id DESC
